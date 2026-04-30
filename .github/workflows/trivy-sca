@@ -1,0 +1,19 @@
+name: "SCA: Trivy Vulnerability Scanner"
+on: [pull_request]
+
+jobs:
+  trivy-sca:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Run Trivy vulnerability scanner in fs mode
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          scan-ref: '.'
+          trivy-config: trivy.yaml # Archivo para ignorar falsos positivos
+          format: 'table'
+          exit-code: '1' # Falla si encuentra vulnerabilidades
+          ignore-unfixed: true # Ignora vulns sin parche disponible
+          severity: 'CRITICAL,HIGH'
