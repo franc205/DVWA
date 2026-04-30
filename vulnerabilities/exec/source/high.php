@@ -21,6 +21,7 @@ if( isset( $_POST[ 'Submit' ]  ) ) {
 	$target = str_replace( array_keys( $substitutions ), $substitutions, $target );
 
 	// Determine OS and execute the ping command.
+	$target = escapeshellarg( $target );
 	if( stristr( php_uname( 's' ), 'Windows NT' ) ) {
 		// Windows
 		$cmd = shell_exec( 'ping  ' . $target );
