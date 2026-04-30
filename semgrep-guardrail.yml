@@ -1,0 +1,22 @@
+name: "Semgrep: Guardián de Cambios"
+
+on:
+  pull_request:
+    # Se activa al abrir, actualizar o reabrir un PR
+    types: [opened, synchronize, reopened]
+  push:
+    # Se activa al hacer merge o push a las ramas críticas
+    branches: ["main", "master", "develop"]
+
+jobs:
+  semgrep-diff-scan:
+    runs-on: ubuntu-latest
+    container:
+      image: semgrep/semgrep
+    env:
+      SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Diff Scan
+        # Semgrep detecta automáticamente que está en un PR y analiza el diff
+        run: semgrep ci
